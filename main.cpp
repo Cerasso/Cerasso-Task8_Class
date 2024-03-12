@@ -61,7 +61,17 @@ private:
     }
 
 public:
-
+    string ReadLine() {
+        string s;
+        getline(cin, s);
+        return s;
+    }
+    int ReadLineWithNumber() {
+        int result = 0;
+        cin >> result;
+        ReadLine();
+        return result;
+    }
     set<string> ParseQuery(const string& text, const set<string>& stop_words) {
         set<string> query_words;
         for (const string& word : SplitIntoWordsNoStop(text, stop_words)) {
@@ -122,11 +132,22 @@ public:
     }    
 };
 
-int main() {
-    SearchServer server;
-    server.SetStopWords("a the and or with"s);
-    server.AddDocument(1, "white cat with green eyes"s);
-    for (auto [id, relevance] : server.FindTopDocuments("white cat")) {
+SearchServer CreateSearchServer(){
+    
+    SearchServer search_server;
+    search_server.SetStopWords(search_server.SearchServer::ReadLine());
+    const int document_count = search_server.ReadLineWithNumber();
+    for (int document_id = 0; document_id < document_count; ++document_id) {
+        search_server.AddDocument(document_id, search_server.SearchServer::ReadLine());
+    }
+    
+        for (auto [id, relevance] : search_server.FindTopDocuments(search_server.SearchServer::ReadLine())) {
         cout << "id:"s << id << ", relevance: "s << relevance << endl;
     }
+
+    return search_server;
+}
+
+int main() {
+    CreateSearchServer();
 }
