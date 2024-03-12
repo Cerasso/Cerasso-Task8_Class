@@ -13,7 +13,9 @@ struct Document {
     int id;
     int relevance;
 };
-
+bool HasDocumentGreaterRelevance(const Document& lhs, const Document& rhs) {
+        return lhs.relevance > rhs.relevance;
+    }
 class SearchServer {
 private:
     struct DocumentContent {
@@ -115,10 +117,6 @@ public:
         }
         return static_cast<int>(matched_words.size());
     }
-
-    static bool HasDocumentGreaterRelevance(const Document& lhs, const Document& rhs) {
-        return lhs.relevance > rhs.relevance;
-    }
     
     vector<Document> FindTopDocuments(const string& raw_query) {
 
@@ -142,8 +140,9 @@ SearchServer CreateSearchServer(){
     }
     
         for (auto [id, relevance] : search_server.FindTopDocuments(search_server.SearchServer::ReadLine())) {
-        cout << "id:"s << id << ", relevance: "s << relevance << endl;
-    }
+            cout << "{ document_id = "s << id << ", relevance = "s << relevance << " }"s << endl;
+        }
+    
 
     return search_server;
 }
