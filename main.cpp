@@ -26,7 +26,7 @@ private:
     vector<DocumentContent> documents_;
     set<string> stop_words_;
 
-    vector<string> SplitIntoWords(const string& text) {
+    vector<string> SplitIntoWords(const string& text) const {
         vector<string> words;
         string word;
         for (const char c : text) {
@@ -52,7 +52,7 @@ private:
         }
         return stop_words;
     }
-    vector<string> SplitIntoWordsNoStop(const string& text, const set<string>& stop_words) {
+    vector<string> SplitIntoWordsNoStop(const string& text, const set<string>& stop_words) const{
         vector<string> words;
         for (const string& word : SplitIntoWords(text)) {
             if (stop_words.count(word) == 0) {
@@ -63,7 +63,7 @@ private:
     }
 
 public:
-    string ReadLine() {
+    string ReadLine() const {
         string s;
         getline(cin, s);
         return s;
@@ -74,7 +74,7 @@ public:
         ReadLine();
         return result;
     }
-    set<string> ParseQuery(const string& text, const set<string>& stop_words) {
+    set<string> ParseQuery(const string& text, const set<string>& stop_words) const{
         set<string> query_words;
         for (const string& word : SplitIntoWordsNoStop(text, stop_words)) {
             query_words.insert(word);
@@ -92,7 +92,7 @@ public:
     }
 
     vector<Document> FindAllDocuments(const vector<DocumentContent>& documents,
-                                  const set<string>& query_words) {
+                                  const set<string>& query_words) const {
         vector<Document> matched_documents;
         for (const auto& document : documents) {
             const int relevance = MatchDocument(document, query_words);
@@ -102,7 +102,7 @@ public:
         }
         return matched_documents;
     }
-    int MatchDocument(const DocumentContent& content, const set<string>& query_words) {
+    int MatchDocument(const DocumentContent& content, const set<string>& query_words) const {
         if (query_words.empty()) {
             return 0;
         }
@@ -118,7 +118,7 @@ public:
         return static_cast<int>(matched_words.size());
     }
     
-    vector<Document> FindTopDocuments(const string& raw_query) {
+    vector<Document> FindTopDocuments(const string& raw_query)const {
 
         const set<string> query_words = ParseQuery(raw_query, stop_words_);
         vector<Document> matched_documents = FindAllDocuments(documents_, query_words);
@@ -141,11 +141,14 @@ SearchServer CreateSearchServer(){
     for (int document_id = 0; document_id < document_count; ++document_id) {
         search_server.AddDocument(document_id, search_server.ReadLine());
     }
+    
+
+
     return search_server;
 }
 
 int main() {
-    SearchServer server = CreateSearchServer();
+    const SearchServer server = CreateSearchServer();
         for (auto [id, relevance] : server.FindTopDocuments(server.ReadLine())) {
         cout << "{ document_id = "s << id << ", relevance = "s << relevance << " }"s << endl;
     }
