@@ -50,8 +50,6 @@ private:
         }
         return stop_words;
     }
-
-public:
     vector<string> SplitIntoWordsNoStop(const string& text, const set<string>& stop_words) {
         vector<string> words;
         for (const string& word : SplitIntoWords(text)) {
@@ -61,6 +59,8 @@ public:
         }
         return words;
     }
+
+public:
 
     set<string> ParseQuery(const string& text, const set<string>& stop_words) {
         set<string> query_words;
@@ -106,7 +106,7 @@ public:
         return static_cast<int>(matched_words.size());
     }
 
-    bool HasDocumentGreaterRelevance(const Document& lhs, const Document& rhs) {
+    static bool HasDocumentGreaterRelevance(const Document& lhs, const Document& rhs) {
         return lhs.relevance > rhs.relevance;
     }
     
