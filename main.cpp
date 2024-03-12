@@ -133,20 +133,20 @@ public:
 SearchServer CreateSearchServer(){
     
     SearchServer search_server;
-    search_server.SetStopWords(search_server.SearchServer::ReadLine());
-    const int document_count = search_server.ReadLineWithNumber();
-    for (int document_id = 0; document_id < document_count; ++document_id) {
-        search_server.AddDocument(document_id, search_server.SearchServer::ReadLine());
-    }
-    
-        for (auto [id, relevance] : search_server.FindTopDocuments(search_server.SearchServer::ReadLine())) {
-            cout << "{ document_id = "s << id << ", relevance = "s << relevance << " }"s << endl;
-        }
-    
 
+    search_server.SetStopWords(search_server.ReadLine());
+
+    const int document_count = search_server.ReadLineWithNumber();
+
+    for (int document_id = 0; document_id < document_count; ++document_id) {
+        search_server.AddDocument(document_id, search_server.ReadLine());
+    }
     return search_server;
 }
 
 int main() {
-    CreateSearchServer();
+    SearchServer server = CreateSearchServer();
+        for (auto [id, relevance] : server.FindTopDocuments(server.ReadLine())) {
+        cout << "{ document_id = "s << id << ", relevance = "s << relevance << " }"s << endl;
+    }
 }
